@@ -3,6 +3,8 @@ import DefaultLayout from '../layout/DefaultLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Lottie from 'react-lottie';
+import axios from 'axios';
+
 // import ReactMarkdown from 'react-markdown';
 // import animationData from '../Lotties/Business.json';
 // import animationData from '../Lotties/Robot-loading.json';
@@ -12,7 +14,7 @@ import SubmitLoading from '../../public/Lotties/Submit-loading.json';
 // const SubmitLoading  = require("../Lotties/Submit-loading.json")
 // const animationData = require("../Lotties/Hand-robot.json")
 const serverUrl = "http://localhost:5000/api";
-
+const apikey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY;
 interface Message {
     id: number;
     text: string;
@@ -104,12 +106,11 @@ const Assistant = () => {
     const handleKeyDown = (event: any) => {
         if (event.key === 'Enter') {
             event.preventDefault(); // Prevent the default Enter key behavior
-            // Submit the form programmatically
             handleSubmit();
         }
     };
     const handleSubmit = async () => {
-        console.log("submit....")
+        console.log("api-key================>", apikey);
         setErrorMessage("");
         setSubmitLoading(true);
         if (prompt.trim() == "") {
@@ -118,64 +119,32 @@ const Assistant = () => {
             setErrorMessage("All fields Required!");
             return;
         }
-        console.log("-----prompt-------", prompt);
-        let num = 0;
-        if (messages != null) {
-            num = messages?.length;
-            setMessages([...messages, { id: num, text: prompt, sender: "user" }]);
-        } else {
-            num = 0;
-            setMessages([{ id: 0, text: prompt, sender: "user" }]);
-        }
-        // setResponseExist(true);
+
         try {
-            // Replace 'your-api-url' with the actual URL of your REST API
-            // const response = await fetch(`${serverUrl}/proprietary-assistant`, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ prompt: prompt }),
-            // });
-            // if (!response.ok) {
-            //     throw new Error('Network response was not ok');
-            // }
-            // const data = await response.json();
-            // setCompletion(data.result);
-            const response = `
-            Overview of the System:
-            The system involves filing a request for formatting a Google document according to the company's style standards.\n
-            Trigger:
-            The trigger for this process is having a Google document that needs to be formatted for external sharing with clients or customers.
-            Step 1: Duplicate the Task
-            Command: Duplicate the task "gddoc/document formatting request" in Asana under Systems, Policies, and Training.
-            Go to Asana and navigate to Systems, Policies, and Training.
-            Locate the specific task "gddoc/document formatting request" and duplicate it.
-            Step 2: Rename the Task
-            Command: Rename the duplicated task to match the actual file name of your Google document (e.g., "Certification Team Member Agreement").
-            Update the task name to reflect the document being formatted.
-            Step 3: Fill Out Job Request Form
-            Command: Edit the job request form and insert the link to your document.
-            If the document is not in Google, upload it.
-            Determine the priority level (low, mid, high) and tag the knowledgeable worker.
-            Step 4: Additional Details
-            Command: Provide additional information as needed.
-            Specify the folder location for saving the document if necessary.
-            Add any notes or instructions for formatting requirements.
-            Step 5: Assign to Documentation Specialist
-            Command: Assign the task to a documentation specialist (e.g., Joe) with a due date.
-            Set a reasonable timeframe for completion (e.g., two weeks).
-            Step 6: Completion
-            Command: Complete the task once assigned.
-            Verify that all necessary information has been provided and subtasks are marked as complete.`;
-            setCompletion(response);
-            // setResponseExist(true);            
-            setTimeout(() => setResponseExist(true), 1000);
+            const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + apikey,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: "You are a helpful assistant." },
+                        { role: "user", content: prompt },
+                    ],
+                })
+            });
+
+            const data = await response.json();
+            console.log("response data=========================>", data);
+            setResponseExist(true);
+            setCompletion(data.choices[0].message.content);
+
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
             setErrorMessage("Network Error! Please try again.");
         } finally {
-            console.log("transcript", transcript)
             console.log("responseExist--------->", responseExist);
         }
     };
@@ -269,7 +238,7 @@ const Assistant = () => {
                     (
                         <div className="sm:h-[70%] h-[35%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] bg-gradient-to-r to-[#045d7e] from-[#033d52] rounded-xl text-[#fff] font-sans font-medium text-xl m-0 p-0">
                             {/* <ReactMarkdown>{completion}</ReactMarkdown> */}
-                            <pre style={{textAlign:'left', whiteSpace:"pre-line", justifyContent:"space-around"}} className="sm:ml-[100px] ml-[20px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
+                            <pre style={{ textAlign: 'left', whiteSpace: "pre-line", justifyContent: "space-around" }} className="sm:ml-[100px] ml-[20px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
                             {/* <FontAwesomeIcon icon={faRobot} className="mr-2 absolute top-20 left-5" size='xl' /> */}
                             <button onClick={handleCopy} className="copy-button absolute top-5 right-5">
                                 {isCopied ? (
