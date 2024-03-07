@@ -257,7 +257,7 @@ const Assistant = () => {
             {
                 (submitLoading && responseExist) &&
                 (
-                    <button onClick={handleBack} className="absolute z-[100] top-[-50px] right-0 w-30 bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
+                    <button onClick={handleBack} className="absolute z-[100] top-[-50px] right-2 w-30 bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
                         <FontAwesomeIcon icon={faAnglesLeft} className="mr-2" />
                         Back
                     </button>
@@ -267,9 +267,9 @@ const Assistant = () => {
             {
                 (submitLoading && responseExist) ?
                     (
-                        <div className="h-[70%] overflow-hidden overflow-y-auto overflow-x-auto min-h-[70%] max-h-[70%] relative py-[5%] justify-around  bg-gradient-to-r to-[#045d7e] from-[#033d52] rounded-xl text-[#fff] font-sans font-medium text-xl m-0 p-0">
+                        <div className="sm:h-[70%] h-[35%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] bg-gradient-to-r to-[#045d7e] from-[#033d52] rounded-xl text-[#fff] font-sans font-medium text-xl m-0 p-0">
                             {/* <ReactMarkdown>{completion}</ReactMarkdown> */}
-                            <pre className="ml-[-100px]">{completion}</pre>
+                            <pre style={{textAlign:'left', whiteSpace:"pre-line", justifyContent:"space-around"}} className="sm:ml-[100px] ml-[20px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
                             {/* <FontAwesomeIcon icon={faRobot} className="mr-2 absolute top-20 left-5" size='xl' /> */}
                             <button onClick={handleCopy} className="copy-button absolute top-5 right-5">
                                 {isCopied ? (
@@ -285,7 +285,7 @@ const Assistant = () => {
                         <div className="mx-5 bg-transparent flex flex-col">
                             {/* <div className="bg-transparent flex space-x-4 justify-between"> */}
                             {/* <input value={processType} onChange={(e) => setProcessType(e.target.value)} type="text" className="w-full py-3 px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-200 text-white dark:text-white font-sans rounded-xl border-solid border-2 border-[#35316f] focus-within:shadow-xl focus-within:shadow-[#35316f]" placeholder="What type of process are you looking to document?" /> */}
-                            <form className="relative w-full mt-2">
+                            <form className="relative w-full">
                                 <input
                                     value={processType}
                                     onChange={(e) => setProcessType(e.target.value)}
@@ -298,7 +298,7 @@ const Assistant = () => {
                                     className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" // Adjust positioning as needed
                                 />
                             </form>
-                            <form className="relative w-full mt-2">
+                            <form className="relative w-full mt-3">
                                 <input
                                     value={peopleNumber}
                                     onChange={(e) => setPeopleNumber(e.target.value)}
@@ -315,7 +315,7 @@ const Assistant = () => {
                             <div className="relative">
                                 {/* <textarea onChange={handleTextareaEdit} value={transcript} rows={textareaHeight} onInput={handleTextareaChange} className="overflow-y-auto w-full my-5 py-3 px-3 min-h-60 text-xl bg-[#0000] placeholder:text-slate-200 text-white dark:text-white font-sans rounded-xl ${isTextareaEmpty ? 'border-red-500' : 'border-[#35316f]'} border-solid border-2 border-[#35316f] focus-within:shadow-xl focus-within:shadow-[#35316f]" placeholder="*Please copy and paste your transcript below:" /> */}
                                 <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={textareaHeight} onInput={handleTextareaChange} className="overflow-y-auto w-full mt-3 py-3 px-3 min-h-60 text-xl bg-[#0000]  text-white dark:text-white border-[#61c6ea] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus-within:shadow-lg focus-within:shadow-[#61c6ea] focus:outline-none" placeholder="*Please copy and paste your transcript below:" />
-                                <div className="absolute right-4 bottom-0 flex z-10" style={{ bottom: `${textareaHeight * 6}px` }}>
+                                <div className="absolute right-4 bottom-0 flex z-10" style={{ bottom: `${textareaHeight * 4}px` }}>
                                     {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center">
                                         <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
                                         Upload
@@ -328,11 +328,11 @@ const Assistant = () => {
                                         id="fileInput"
                                     />
                                     {/* Upload button */}
-                                    <label htmlFor="fileInput" className="bg-gradient-to-r from-[#61c6eaaf] to-[#61c6ea]  hover:opacity-70 text-white font-bold py-2 px-4 rounded flex items-center cursor-pointer">
+                                    <label htmlFor="fileInput" className="bg-gradient-to-r from-[#61c6eaaf] to-[#61c6ea]  hover:opacity-70 text-white font-bold py-2 px-2 rounded flex items-center cursor-pointer">
                                         <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
                                         Upload
                                     </label>
-                                    <button onClick={handleLoad} className="bg-gradient-to-r from-blue-700 to-blue-500  hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
+                                    <button onClick={handleLoad} className="bg-gradient-to-r from-blue-700 to-blue-500  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
                                         {
                                             loading ? (<FontAwesomeIcon icon={faSpinner} spin />)
                                                 :
@@ -340,7 +340,7 @@ const Assistant = () => {
                                         }
                                         Google
                                     </button>
-                                    <button onClick={handleSubmit} className="w-30 bg-gradient-to-r from-[#7a2dc1] to-[#dd00ac]  hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
+                                    <button onClick={handleSubmit} className="w-25 bg-gradient-to-r from-[#7a2dc1] to-[#dd00ac]  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
                                         {
                                             submitLoading ? (<FontAwesomeIcon icon={faSpinner} spin />)
                                                 :
