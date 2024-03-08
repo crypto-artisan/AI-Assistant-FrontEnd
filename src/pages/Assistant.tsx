@@ -13,7 +13,7 @@ import SubmitLoading from '../../public/Lotties/Submit-loading.json';
 
 // const SubmitLoading  = require("../Lotties/Submit-loading.json")
 // const animationData = require("../Lotties/Hand-robot.json")
-const serverUrl = "http://localhost:5000/api";
+const serverUrl = "https://ai-assistant-back-end.vercel.app/api";
 const role = `
 You are a document specialist.
 I will be giving you a transcript someone detailing the step by step process to: "A request a google document". But I want you to read and follow the instructions that I will send first. Are you ready?
