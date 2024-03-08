@@ -325,7 +325,7 @@ const Assistant = () => {
             {
                 (submitLoading && responseExist) ?
                     (
-                        <div className="sm:h-[70%] h-[35%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] bg-gradient-to-r to-[#045d7e] from-[#033d52] rounded-xl text-[#fff] font-sans font-medium text-xl m-0 p-0">
+                        <div className="sm:h-[70%] sm:min-h[70%] min-h[35%] h-[35%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] bg-gradient-to-r to-[#045d7e] from-[#033d52] rounded-xl text-[#fff] font-sans font-medium text-xl m-0 p-0">
                             {/* <ReactMarkdown>{completion}</ReactMarkdown> */}
                             <pre style={{ textAlign: 'left', whiteSpace: "pre-line", justifyContent: "space-around" }} className="sm:ml-[100px] ml-[20px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
                             {/* <FontAwesomeIcon icon={faRobot} className="mr-2 absolute top-20 left-5" size='xl' /> */}
