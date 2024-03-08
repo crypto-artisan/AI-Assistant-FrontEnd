@@ -282,7 +282,6 @@ const Assistant = () => {
     };
     return (
         <DefaultLayout>
-            <h1>apikey:{apikey}</h1>
             {
                 (!submitLoading && !responseExist) &&
                 (
