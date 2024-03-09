@@ -50,7 +50,6 @@ const Assistant = () => {
     const [responseExist, setResponseExist] = useState(false);
     //prompting
     const [transcript, setTranscript] = useState<string>("");
-    const [instruction, setInstruction] = useState<string>("");
     const [prompt, setPrompt] = useState<string>("");
     const [processType, setProcessType] = useState<string>("");
     const [peopleNumber, setPeopleNumber] = useState<string>("");
@@ -85,13 +84,29 @@ const Assistant = () => {
         setLoading(true);
         try {
             // Replace 'your-api-url' with the actual URL of your REST API
-            // const response = await fetch(`${serverUrl}/singleperson-prompt`);
             const response = await fetch(`${serverUrl}/file-format`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
             setTranscript(data.result);
+            // if (peopleNumber == "1") {
+            //     const response = await fetch(`${serverUrl}/file-format`);
+            //     if (!response.ok) {
+            //         throw new Error('Network response was not ok');
+            //     }
+            //     const data = await response.json();
+            //     setTranscript(data.result);
+            // }
+            // else {
+            //     const response = await fetch(`${serverUrl}/facebook-engagement`);
+            //     if (!response.ok) {
+            //         throw new Error('Network response was not ok');
+            //     }
+            //     const data = await response.json();
+            //     setTranscript(data.result);
+            // }
+
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         } finally {
@@ -109,10 +124,9 @@ const Assistant = () => {
         }
     };
     const handleSubmit = async () => {
-        console.log("api-key================>", apikey);
         setErrorMessage("");
         setSubmitLoading(true);
-        if (prompt.trim() == "" || peopleNumber.trim() == "" || processType.trim() == "") {
+        if (prompt.trim() == "") {
             console.log("prompt is empty");
             setSubmitLoading(false);
             setErrorMessage("All fields Required!");
@@ -120,24 +134,25 @@ const Assistant = () => {
         }
 
         try {
-            let response1;
+            let instruction;
             if (peopleNumber == "1") {
+                let response1;
                 response1 = await fetch(`${serverUrl}/singleperson-prompt`);
                 if (!response1.ok) {
                     throw new Error('Network response was not ok');
                 }
-                const data1 = await response1.json();
-                setInstruction(`%ProcessType% is ${processType}.\n${data1.result}`);
-                console.log("people = 1", instruction);
+                let data1 = await response1.json();
+                instruction = `%ProcessType% is ${processType}.\n${data1.result}`;
+                // console.log("people = 1 instruction", instruction);
             }
             else {
-                response1 = await fetch(`${serverUrl}/multiperson-prompt`);
-                if (!response1.ok) {
+                let response2 = await fetch(`${serverUrl}/multiperson-prompt`);
+                if (!response2.ok) {
                     throw new Error('Network response was not ok');
                 }
-                const data1 = await response1.json();
-                setInstruction(`%number of people% is ${peopleNumber} and %ProcessType% is ${processType}.\n${data1.result}`);
-                console.log("people >= 1", instruction);
+                let data2 = await response2.json();
+                instruction = `%number of people% is ${peopleNumber} and %ProcessType% is ${processType}.\n${data2.result}`;
+                // console.log("people >= 1 instruction", instruction);
             }
             const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
                 method: "POST",
@@ -157,7 +172,7 @@ const Assistant = () => {
             });
 
             const data = await response.json();
-            console.log("response data=========================>", data);
+            // console.log("response data=========================>", data);
             setResponseExist(true);
             setCompletion(data.choices[0].message.content);
 
@@ -312,7 +327,7 @@ const Assistant = () => {
                                     </button> */}
                                     <input
                                         type="file"
-                                        accept=".txt"
+                                        accept=".txt,.doc,.docx"
                                         onChange={handleFileUpload}
                                         className="hidden"
                                         id="fileInput"
