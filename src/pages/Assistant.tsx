@@ -112,7 +112,7 @@ const Assistant = () => {
         console.log("api-key================>", apikey);
         setErrorMessage("");
         setSubmitLoading(true);
-        if (prompt.trim() == "") {
+        if (prompt.trim() == "" || peopleNumber.trim() == "" || processType.trim() == "") {
             console.log("prompt is empty");
             setSubmitLoading(false);
             setErrorMessage("All fields Required!");
