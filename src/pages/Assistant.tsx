@@ -3,103 +3,15 @@ import DefaultLayout from '../layout/DefaultLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Lottie from 'react-lottie';
-import axios from 'axios';
+// import axios from 'axios';
 
-// import ReactMarkdown from 'react-markdown';
-// import animationData from '../Lotties/Business.json';
-// import animationData from '../Lotties/Robot-loading.json';
 import animationData from '../../public/Lotties/Hand-robot.json';
 import SubmitLoading from '../../public/Lotties/Submit-loading.json';
 
 // const SubmitLoading  = require("../Lotties/Submit-loading.json")
 // const animationData = require("../Lotties/Hand-robot.json")
-const serverUrl = "http://localhost:5000/api";
-const role = `
-You are a document specialist.
-I will be giving you a transcript someone detailing the step by step process to: "A request a google document". But I want you to read and follow the instructions that I will send first. Are you ready?
+const serverUrl = "http://95.216.2.26:5050/api";
 
-Here are the instructions:
-
-This instruction prompt outlines the structured process for a Documentation Specialist tasked with creating systems documentation. Please adhere to the following steps:
-
-Initial Prompts:
- You will receive three initial prompts: the INSTRUCTION prompt, a CONTEXT prompt, and a FORMAT prompt.
-
-Transcript Analysis:
-You will be provided with a transcript of someone discussing a specific process related to our systems.
-
-Procedure Creation:
-Analyze the INSTRUCTION, CONTEXT, and FORMAT prompts meticulously. Utilize these guidelines as rules to craft a detailed work instruction procedure. Ensure that your document aligns with the unique needs and complexity of our systems.
-
-"As an Internal Systems Documentation Specialist, the role is to create detailed documentation based on the conversation between the discussion of two people provided in the transcript. This conversation investigates how the Knowledgeable Worker executes a specific process within our internal systems. Follow the principles outlined below for effective documentation:
-
-Principle of Task:
-The Knowledgeable worker facilitates the conversation for clarity and context.
-
-He/she systematically summarizes content into different steps and sub-steps, identifying crucial steps.
-
-The Knowledgeable worker may occasionally exclude irrelevant information.
-
-Both acknowledge the importance of certain steps, restating or confirming their significance.
-
-Note: Pay close attention when summarizing steps, ensuring alignment with the Knowledgeable worker’s confirmation.
-
-Consider deviations like ""sometimes we do this""; follow my guidance on inclusion or exclusion, prioritizing the common path over exceptions.
-
-The recording will be initiated by the Knowledgeable worker and identifying the discussed process and its starting point. Be cautious about transcriptions; imperfect alignments and continuity issues may exist, such as the last word of one speaker becoming the first word of the next.
-
-Process Creation Goals:
-Identify and document crucial steps with complex detail for readers with minor prerequisite knowledge.
-
-Maintain a document word count of approximately 30-40% of the transcript's word count.
-
-
-Adhere to the FORMAT prompt for document layout.
-
-Identify logical steps, creating a document that neatly separates the process into manageable sections.
-
-Craft highly detailed step-by-step instructions, avoiding generalizations and ensuring a high degree of specificity.
-
-Instructions:
-Do not summarize the provided instructions.
-Ensure that the steps are clear, concise, and consistent.
-Make sure that the MAIN STEPS and SUB STEPS are written in a COMMAND WAY.
-Ensure that steps are without -ing form and written in a command-like structure.
-Identify the Title, Overview and Trigger of the system.
-Provide decision-making criteria when necessary and include error-handling steps for known issues during the process.
-Follow the chronological order of tasks as discussed in the transcript unless otherwise indicated by the knowledgeable worker.
-
-Provide a detailed step-by-step process of the transcript below in a COMMAND WAY. List the main steps as Step 1, Step 2, and so on, and provide sub-steps underneath in bullet form. Also, please identify the overview of the system and what triggers the process.
-"
-
-"FORMAT PROMPT 
-This format prompt provides guidelines for structuring your internal systems documentation effectively:
-
-Rule 1: Layout
-Each main STEPS and sub-steps must be clear and concise.
-Add dot points underneath for further clarification, either as full sentences or with a few descriptive words.
-Include indenting for additional clarification.
-Limit dot point lists to 5 dots maximum. Break lists into smaller categories if more detail is necessary. Use numbered points if necessary.
-
-Rule 2: Accuracy or complexity
-Construct the ""why"" behind various steps throughout your writing.
-Integrate ""Notes"" and ""Suggestions"" under each respective step where warranted.
-Bold Suggestions for effective tips or tricky scenarios. For instance, ""Suggestion: If the customer offers to pay in advance, politely decline and express thanks.""
-Bold Notes for mission-critical elements. For example, ""Note: Pay close attention to the customer's budget for aligned expectations.""
-
-Rule 3: Formatting
-Use the main steps in Heading 2 format to categorize process chunks with broad, simple titles in sentence case (e.g., ""Step 1: Prepare for the meeting"").
-Use H4 subheadings without numbers only when necessary for very long steps that need a detailed summary. Utilize American English.
-Triple-line spacing before each new step.
-Specify file locations by indenting and italicizing.
-Use bold, italics, and underlining only when necessary to emphasize important points or provide clarification.
-
-Please take note of this: I want the MAIN Step 1, Step 2, Step 3, Step 4, and so on to be in a command way.
-Example: Step 1: Measure Initial Distance
-
-Understood?"
-
-`
 const apikey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY;
 interface Message {
     id: number;
@@ -137,8 +49,9 @@ const Assistant = () => {
     const [submitLoading, setSubmitLoading] = useState(false);
     const [responseExist, setResponseExist] = useState(false);
     //prompting
-    const [transcript, setTranscript] = useState("");
-    const [prompt, setPrompt] = useState("");
+    const [transcript, setTranscript] = useState<string>("");
+    const [instruction, setInstruction] = useState<string>("");
+    const [prompt, setPrompt] = useState<string>("");
     const [processType, setProcessType] = useState<string>("");
     const [peopleNumber, setPeopleNumber] = useState<string>("");
     //gpt response
@@ -207,6 +120,25 @@ const Assistant = () => {
         }
 
         try {
+            let response1;
+            if (peopleNumber == "1") {
+                response1 = await fetch(`${serverUrl}/singleperson-prompt`);
+                if (!response1.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data1 = await response1.json();
+                setInstruction(`%ProcessType% is ${processType}.\n${data1.result}`);
+                console.log("people = 1", instruction);
+            }
+            else {
+                response1 = await fetch(`${serverUrl}/multiperson-prompt`);
+                if (!response1.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data1 = await response1.json();
+                setInstruction(`%number of people% is ${peopleNumber} and %ProcessType% is ${processType}.\n${data1.result}`);
+                console.log("people >= 1", instruction);
+            }
             const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
                 method: "POST",
                 headers: {
@@ -217,7 +149,7 @@ const Assistant = () => {
                     model: "gpt-4",
                     messages: [
                         {
-                            role: "system", content: role
+                            role: "system", content: instruction
                         },
                         { role: "user", content: prompt },
                     ],
