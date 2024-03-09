@@ -312,7 +312,7 @@ const Assistant = () => {
                                     </button> */}
                                     <input
                                         type="file"
-                                        accept=".txt,.doc,.docx"
+                                        accept=".txt"
                                         onChange={handleFileUpload}
                                         className="hidden"
                                         id="fileInput"
