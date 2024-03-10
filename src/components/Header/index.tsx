@@ -17,7 +17,9 @@ const Header = (props: {
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4">
           <Link className="block flex-shrink-0" to="/">
-            <img src={LogoIcon} alt="Logo" className='h-10 w-auto' />
+            <a href="https://systemhub.com" target="_blank" rel="noopener noreferrer">
+              <img src={LogoIcon} alt="Logo" className='h-10 w-auto' />
+            </a>
           </Link>
         </div>
         <div className="hidden sm:block">
