@@ -39,10 +39,7 @@ const Assistant = () => {
         }
     };
     const [textareaHeight, setTextareaHeight] = useState(5); // Default height in rows
-    const handleTextareaChange = (event: any) => {
-        const newHeight = event.target.scrollHeight / event.target.offsetHeight + 4;
-        setTextareaHeight(newHeight);
-    };
+
     //textarea validation
     const [isTextareaEmpty, setIsTextareaEmpty] = useState(true);
 
@@ -346,8 +343,8 @@ const Assistant = () => {
                             {/* </div> */}
                             <div className="relative">
                                 {/* <textarea onChange={handleTextareaEdit} value={transcript} rows={textareaHeight} onInput={handleTextareaChange} className="overflow-y-auto w-full my-5 py-3 px-3 min-h-60 text-xl bg-[#0000] placeholder:text-slate-200 text-white dark:text-white font-sans rounded-xl ${isTextareaEmpty ? 'border-red-500' : 'border-[#35316f]'} border-solid border-2 border-[#35316f] focus-within:shadow-xl focus-within:shadow-[#35316f]" placeholder="*Please copy and paste your transcript below:" /> */}
-                                <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={textareaHeight} onInput={handleTextareaChange} className="overflow-y-auto w-full mt-3 py-3 px-3 min-h-60 text-xl bg-[#0000]  text-black dark:text-white border-[#61c6ea] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus-within:shadow-lg focus-within:shadow-[#61c6ea] focus:outline-none" placeholder="*Please copy and paste your transcript below:" />
-                                <div className="absolute right-4 bottom-0 flex z-10" style={{ bottom: `${textareaHeight * 4}px` }}>
+                                <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={5} className="resize-none overflow-y-auto w-full mt-3 py-3 px-3 min-h-60 text-xl bg-[#0000] text-black dark:text-white border-[#61c6ea] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus-within:shadow-lg focus-within:shadow-[#61c6ea] focus:outline-none" placeholder="*Please copy and paste your transcript below:" />
+                                <div className="absolute right-4 bottom-0 flex z-10" style={{ bottom: "20px" }}>
                                     {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center">
                                         <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
                                         Upload
