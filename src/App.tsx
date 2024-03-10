@@ -28,7 +28,7 @@ function App() {
           index
           element={
             <>
-              <PageTitle title="SystemHub-AI Assistant" />
+              <PageTitle title="systemHUB-AI Assistant" />
               <Assistant />
             </>
           }
@@ -37,7 +37,7 @@ function App() {
           path="/auth/signin"
           element={
             <>
-              <PageTitle title="Signin | SystemHub-AI Assistant" />
+              <PageTitle title="Signin | systemHUB-AI Assistant" />
               <SignIn />
             </>
           }
@@ -46,7 +46,7 @@ function App() {
           path="/auth/signup"
           element={
             <>
-              <PageTitle title="Signup | SystemHub-AI Assistant" />
+              <PageTitle title="Signup | systemHUB-AI Assistant" />
               <SignUp />
             </>
           }
