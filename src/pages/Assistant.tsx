@@ -4,17 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 import Lottie from 'react-lottie';
-// import axios from 'axios';
 
 import animationData from '../../public/Lotties/Hand-robot.json';
 import SubmitLoading from '../../public/Lotties/Submit-loading.json';
 
-// const SubmitLoading  = require("../Lotties/Submit-loading.json")
-// const animationData = require("../Lotties/Hand-robot.json")
-// const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
 const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
 
-const apikey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY;
+const apikey = process.env.VITE_REACT_APP_OPENAI_API_KEY;
 interface Message {
     id: number;
     text: string;
@@ -38,18 +34,14 @@ const Assistant = () => {
             preserveAspectRatio: "xMidYMid slice"
         }
     };
-    const [textareaHeight, setTextareaHeight] = useState(5); // Default height in rows
-
-    //textarea validation
-    const [isTextareaEmpty, setIsTextareaEmpty] = useState(true);
 
     //loading status
     const [loading, setLoading] = useState(false);
     const [submitLoading, setSubmitLoading] = useState(false);
     const [responseExist, setResponseExist] = useState(false);
     //prompting
-    const [transcript, setTranscript] = useState<string>("");
     const [prompt, setPrompt] = useState<string>("");
+    const [transcript, setTranscript] = useState<string>("");
     const [processType, setProcessType] = useState<string>("");
     const [peopleNumber, setPeopleNumber] = useState<string>("");
     //gpt response
@@ -82,13 +74,6 @@ const Assistant = () => {
     const handleLoad = async () => {
         setLoading(true);
         try {
-            // Replace 'your-api-url' with the actual URL of your REST API
-            // const response = await fetch(`${serverUrl}/file-format`);
-            // if (!response.ok) {
-            //     throw new Error('Something went wrong, please try again!');
-            // }
-            // const data = await response.json();
-            // setTranscript(data.result);
             if (peopleNumber.trim() == "") {
                 // console.log("people number is empty");
                 setErrorMessage("Type a number of people!");
@@ -133,7 +118,7 @@ const Assistant = () => {
             textarea.value = textBefore + '\n' + textAfter;
             textarea.selectionStart = textarea.selectionEnd = start + 1; // Move cursor to the next position
         }
-        if (event.key === 'Enter') {
+        else if (event.key === 'Enter') {
             event.preventDefault(); // Prevent the default Enter key behavior
             handleSubmit();
         }
@@ -141,7 +126,7 @@ const Assistant = () => {
     const handleSubmit = async () => {
         setErrorMessage("");
         setSubmitLoading(true);
-        if (prompt.trim() == "" || processType.trim() == "" || peopleNumber.trim() == "") {
+        if (transcript.trim() == "" || processType.trim() == "" || peopleNumber.trim() == "") {
             console.log("prompt is empty");
             setSubmitLoading(false);
             setErrorMessage("All fields Required!");
@@ -201,7 +186,6 @@ const Assistant = () => {
     };
     const handleTextareaEdit = (event: any) => {
         setTranscript(event.target.value);
-        setIsTextareaEmpty(event.target.value.trim() === '');
     };
     const handleCopy = async () => {
         try {
@@ -224,23 +208,6 @@ const Assistant = () => {
             };
             reader.readAsText(file);
         }
-    };
-    const Message = ({ message }: { message: Message }) => {
-        return (
-            <>
-                <>
-                    {message.sender == "user" ? (
-                        <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
-
-                    ) : (
-                        <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
-                    )}
-                    <div>
-                        {message.text}
-                    </div>
-                </>
-            </>
-        );
     };
     return (
         <DefaultLayout>
@@ -268,12 +235,6 @@ const Assistant = () => {
                     </div>
                 )
             }
-            {/* {messages?.map((message) => (
-                <>
-                    <Message key={message.id} message={message} />
-                    <hr />
-                </>
-            ))} */}
             {
                 (submitLoading && responseExist) &&
                 (
@@ -288,9 +249,7 @@ const Assistant = () => {
                 (submitLoading && responseExist) ?
                     (
                         <div style={{ height: "80%", minHeight: "75%", maxHeight: "75%" }} className="sm:h-[70%] sm:min-h[70%] min-h[70%] h-[70%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] dark:bg-gradient-to-r dark:to-[#045d7e] dark:from-[#033d52] bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] rounded-xl dark:text-[#fff] text-[#000000c5] font-sans font-medium text-xl m-0 p-0">
-                            {/* <ReactMarkdown>{completion}</ReactMarkdown> */}
                             <pre style={{ textAlign: 'left', whiteSpace: "pre-line", justifyContent: "space-around" }} className="sm:ml-[100px] ml-[20px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
-                            {/* <FontAwesomeIcon icon={faRobot} className="mr-2 absolute top-20 left-5" size='xl' /> */}
                             <button onClick={handleCopy} className="copy-button absolute top-5 right-5">
                                 {isCopied ? (
                                     <FontAwesomeIcon icon={faCheck} size="xl" />
@@ -303,8 +262,6 @@ const Assistant = () => {
                     :
                     (
                         <div className="mx-5 bg-transparent flex flex-col">
-                            {/* <div className="bg-transparent flex space-x-4 justify-between"> */}
-                            {/* <input value={processType} onChange={(e) => setProcessType(e.target.value)} type="text" className="w-full py-3 px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-200 text-white dark:text-white font-sans rounded-xl border-solid border-2 border-[#35316f] focus-within:shadow-xl focus-within:shadow-[#35316f]" placeholder="What type of process are you looking to document?" /> */}
                             <form className="relative w-full">
                                 <input
                                     value={processType}
@@ -342,13 +299,8 @@ const Assistant = () => {
                             </form>
                             {/* </div> */}
                             <div className="relative">
-                                {/* <textarea onChange={handleTextareaEdit} value={transcript} rows={textareaHeight} onInput={handleTextareaChange} className="overflow-y-auto w-full my-5 py-3 px-3 min-h-60 text-xl bg-[#0000] placeholder:text-slate-200 text-white dark:text-white font-sans rounded-xl ${isTextareaEmpty ? 'border-red-500' : 'border-[#35316f]'} border-solid border-2 border-[#35316f] focus-within:shadow-xl focus-within:shadow-[#35316f]" placeholder="*Please copy and paste your transcript below:" /> */}
                                 <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={5} className="resize-none overflow-y-auto w-full mt-3 py-3 px-3 min-h-60 text-xl bg-[#0000] text-black dark:text-white border-[#61c6ea] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus-within:shadow-lg focus-within:shadow-[#61c6ea] focus:outline-none" placeholder="*Please copy and paste your transcript below:" />
                                 <div className="absolute right-4 bottom-0 flex z-10" style={{ bottom: "20px" }}>
-                                    {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center">
-                                        <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
-                                        Upload
-                                    </button> */}
                                     <input
                                         type="file"
                                         accept=".txt,.doc,.docx"
@@ -377,7 +329,6 @@ const Assistant = () => {
                                         }
                                         Submit
                                     </button>
-                                    {/* {transcript && <div>{transcript}</div>} */}
                                 </div>
                             </div>
                             <div className='flex flex-row w-full'>
@@ -388,7 +339,6 @@ const Assistant = () => {
                                         </div>
                                     )
                                 }
-
                             </div>
 
                         </div>
