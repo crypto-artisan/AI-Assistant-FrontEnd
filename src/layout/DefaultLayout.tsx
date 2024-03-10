@@ -13,7 +13,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
           <h1 className='self-center sm:text-[40px] mb-10 text-[0px] text-white font-extrabold'>Easy to Use — No Tech Skills Required</h1>
           {/* <img src="./src/images/wave-top.svg" height={"10px"} className='w-full' /> */}
           <img src = "back-top.png" height={"10px"} className='w-[32%] sm:h-8 h-[0px] self-center mb-3' />
-          <main>
+          <main className='h-screen'>
             <div className="mx-auto max-w-screen-2xl justify-items-stretch h-full relative">
               {children}
             </div>
