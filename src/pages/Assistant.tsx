@@ -303,7 +303,7 @@ const Assistant = () => {
                                     onChange={(e) => setProcessType(e.target.value)}
                                     type="text"
                                     className="w-full py-3 px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 text-white dark:text-white font-sans rounded-xl border-solid border-2 border-[#61c6ea] focus-within:shadow-lg focus-within:shadow-[#61c6ea] pl-10 focus:outline-none" // Added padding-left to make space for the icon
-                                    placeholder="*What type of process are you looking to document? (ex: Google Business)"
+                                    placeholder="*What type of process are you looking to document? (ex: A request a google document)"
                                 />
                                 <FontAwesomeIcon
                                     icon={faScroll} // Replace faDatabase with the icon you want to use
