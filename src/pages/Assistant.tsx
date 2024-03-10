@@ -10,7 +10,7 @@ import SubmitLoading from '../../public/Lotties/Submit-loading.json';
 
 const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
 
-const apikey = process.env.VITE_REACT_APP_OPENAI_API_KEY;
+const apikey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY;
 interface Message {
     id: number;
     text: string;
