@@ -12,7 +12,7 @@ import SubmitLoading from '../../public/Lotties/Submit-loading.json';
 // const SubmitLoading  = require("../Lotties/Submit-loading.json")
 // const animationData = require("../Lotties/Hand-robot.json")
 // const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
-const serverUrl = "http://127.0.0.1:5050/api";
+const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
 
 const apikey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY;
 interface Message {
@@ -48,8 +48,8 @@ const Assistant = () => {
 
     //loading status
     const [loading, setLoading] = useState(false);
-    const [submitLoading, setSubmitLoading] = useState(true);
-    const [responseExist, setResponseExist] = useState(true);
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [responseExist, setResponseExist] = useState(false);
     //prompting
     const [transcript, setTranscript] = useState<string>("");
     const [prompt, setPrompt] = useState<string>("");
