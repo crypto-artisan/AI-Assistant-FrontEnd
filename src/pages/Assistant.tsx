@@ -87,14 +87,14 @@ const Assistant = () => {
             // Replace 'your-api-url' with the actual URL of your REST API
             // const response = await fetch(`${serverUrl}/file-format`);
             // if (!response.ok) {
-            //     throw new Error('Network response was not ok');
+            //     throw new Error('Something went wrong, please try again!');
             // }
             // const data = await response.json();
             // setTranscript(data.result);
             if (peopleNumber == "1") {
                 const response = await fetch(`${serverUrl}/file-format`);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Something went wrong, please try again!');
                 }
                 const data = await response.json();
                 setTranscript(data.result);
@@ -102,7 +102,7 @@ const Assistant = () => {
             else {
                 const response = await fetch(`${serverUrl}/facebook-engagement`);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Something went wrong, please try again!');
                 }
                 const data = await response.json();
                 setTranscript(data.result);
@@ -140,7 +140,7 @@ const Assistant = () => {
                 let response1;
                 response1 = await fetch(`${serverUrl}/singleperson-prompt`);
                 if (!response1.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Something went wrong, please try again!');
                 }
                 let data1 = await response1.json();
                 instruction = `%ProcessType% is ${processType}.\n${data1.result}`;
@@ -149,7 +149,7 @@ const Assistant = () => {
             else {
                 let response2 = await fetch(`${serverUrl}/multiperson-prompt`);
                 if (!response2.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Something went wrong, please try again!');
                 }
                 let data2 = await response2.json();
                 instruction = `%number of people% is ${peopleNumber} and %ProcessType% is ${processType}.\n${data2.result}`;
@@ -179,7 +179,7 @@ const Assistant = () => {
 
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
-            setErrorMessage("Network Error! Please try again.");
+            setErrorMessage("Something went wrong, please try again!");
             setSubmitLoading(false);
         } finally {
             console.log("responseExist--------->", responseExist);
