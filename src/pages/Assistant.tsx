@@ -84,28 +84,28 @@ const Assistant = () => {
         setLoading(true);
         try {
             // Replace 'your-api-url' with the actual URL of your REST API
-            const response = await fetch(`${serverUrl}/file-format`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            // const response = await fetch(`${serverUrl}/file-format`);
+            // if (!response.ok) {
+            //     throw new Error('Network response was not ok');
+            // }
+            // const data = await response.json();
+            // setTranscript(data.result);
+            if (peopleNumber == "1") {
+                const response = await fetch(`${serverUrl}/file-format`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setTranscript(data.result);
             }
-            const data = await response.json();
-            setTranscript(data.result);
-            // if (peopleNumber == "1") {
-            //     const response = await fetch(`${serverUrl}/file-format`);
-            //     if (!response.ok) {
-            //         throw new Error('Network response was not ok');
-            //     }
-            //     const data = await response.json();
-            //     setTranscript(data.result);
-            // }
-            // else {
-            //     const response = await fetch(`${serverUrl}/facebook-engagement`);
-            //     if (!response.ok) {
-            //         throw new Error('Network response was not ok');
-            //     }
-            //     const data = await response.json();
-            //     setTranscript(data.result);
-            // }
+            else {
+                const response = await fetch(`${serverUrl}/facebook-engagement`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setTranscript(data.result);
+            }
 
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
@@ -126,7 +126,7 @@ const Assistant = () => {
     const handleSubmit = async () => {
         setErrorMessage("");
         setSubmitLoading(true);
-        if (prompt.trim() == "") {
+        if (prompt.trim() == "" || processType.trim() == "" || peopleNumber.trim() == "") {
             console.log("prompt is empty");
             setSubmitLoading(false);
             setErrorMessage("All fields Required!");
