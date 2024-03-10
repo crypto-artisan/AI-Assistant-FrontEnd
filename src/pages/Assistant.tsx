@@ -11,7 +11,8 @@ import SubmitLoading from '../../public/Lotties/Submit-loading.json';
 
 // const SubmitLoading  = require("../Lotties/Submit-loading.json")
 // const animationData = require("../Lotties/Hand-robot.json")
-const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
+// const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
+const serverUrl = "http://127.0.0.1:5050/api";
 
 const apikey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY;
 interface Message {
@@ -91,7 +92,12 @@ const Assistant = () => {
             // }
             // const data = await response.json();
             // setTranscript(data.result);
-            if (peopleNumber == "1") {
+            if (peopleNumber.trim() == "") {
+                // console.log("people number is empty");
+                setErrorMessage("Type a number of people!");
+                return;
+            }
+            else if (peopleNumber == "1") {
                 const response = await fetch(`${serverUrl}/file-format`);
                 if (!response.ok) {
                     throw new Error('Something went wrong, please try again!');
@@ -273,7 +279,7 @@ const Assistant = () => {
             {
                 (submitLoading && responseExist) ?
                     (
-                        <div style={{ height: "80%", minHeight: "75%", maxHeight:"75%" }} className="sm:h-[70%] sm:min-h[70%] min-h[70%] h-[70%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] bg-gradient-to-r to-[#045d7e] from-[#033d52] rounded-xl text-[#fff] font-sans font-medium text-xl m-0 p-0">
+                        <div style={{ height: "80%", minHeight: "75%", maxHeight: "75%" }} className="sm:h-[70%] sm:min-h[70%] min-h[70%] h-[70%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] bg-gradient-to-r to-[#045d7e] from-[#033d52] rounded-xl text-[#fff] font-sans font-medium text-xl m-0 p-0">
                             {/* <ReactMarkdown>{completion}</ReactMarkdown> */}
                             <pre style={{ textAlign: 'left', whiteSpace: "pre-line", justifyContent: "space-around" }} className="sm:ml-[100px] ml-[20px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
                             {/* <FontAwesomeIcon icon={faRobot} className="mr-2 absolute top-20 left-5" size='xl' /> */}
@@ -307,7 +313,16 @@ const Assistant = () => {
                             <form className="relative w-full mt-3">
                                 <input
                                     value={peopleNumber}
-                                    onChange={(e) => setPeopleNumber(e.target.value)}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        // Check if the input is a digit
+                                        if (/^\d+$/.test(value)) {
+                                            setPeopleNumber(value);
+                                        } else {
+                                            // Optionally, clear the input or set it to a default value
+                                            setPeopleNumber("");
+                                        }
+                                    }}
                                     type="text"
                                     className="w-full py-3 px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 text-white dark:text-white font-sans rounded-xl border-solid border-2 border-[#61c6ea] focus-within:shadow-lg focus-within:shadow-[#61c6ea] pl-10 focus:outline-none" // Added padding-left to make space for the icon
                                     placeholder="*How many people are in the transcript? (ex: 2)"
