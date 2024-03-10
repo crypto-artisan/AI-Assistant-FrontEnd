@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import DefaultLayout from '../layout/DefaultLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+
 import Lottie from 'react-lottie';
 // import axios from 'axios';
 
@@ -357,10 +358,13 @@ const Assistant = () => {
                                 </div>
                             </div>
                             <div className='flex flex-row w-full'>
-
-                                <div className='w-full text-[#ff0202]'>
-                                    <h1 className='text-center'>{errorMessage}</h1>
-                                </div>
+                                {
+                                    errorMessage && (
+                                        <div className='w-full text-[#de1515]'>
+                                            <h1 className='text-center'><span><FontAwesomeIcon icon={faCircleExclamation} className="mr-2" /></span>{errorMessage}</h1>
+                                        </div>
+                                    )
+                                }
 
                             </div>
 
