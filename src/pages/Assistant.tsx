@@ -102,7 +102,7 @@ const Assistant = () => {
             setLoading(false);
         }
     };
-    const handleBack = async () => {
+    const handleBack = () => {
         setSubmitLoading(false);
         setResponseExist(false);
     }
@@ -179,7 +179,7 @@ const Assistant = () => {
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
             setErrorMessage("Something went wrong, please try again!");
-            setSubmitLoading(false);
+            handleBack();
         } finally {
             console.log("responseExist--------->", responseExist);
         }
