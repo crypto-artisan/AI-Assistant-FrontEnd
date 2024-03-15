@@ -42,8 +42,8 @@ const Assistant = () => {
 
     //loading status
     const [loading, setLoading] = useState(false);
-    const [submitLoading, setSubmitLoading] = useState(true);
-    const [responseExist, setResponseExist] = useState(true);
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [responseExist, setResponseExist] = useState(false);
     //prompting
     const [prompt, setPrompt] = useState<string>("");
     const [transcript, setTranscript] = useState<string>("");
