@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import DefaultLayout from '../layout/DefaultLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup, faCircleExclamation, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import Lottie from 'react-lottie';
@@ -322,7 +322,7 @@ const Assistant = () => {
                     )
                     :
                     (
-                        <div className="mx-20 bg-transparent flex flex-col">
+                        <div className="sm:mx-20 mx-10 bg-transparent flex flex-col">
                             <form className="w-full">
                                 <label htmlFor="processType" className="block text-md mb-2 font-medium text-gray-700">What type of process are you looking to document?*</label>
                                 <div className='relative'>
@@ -386,7 +386,7 @@ const Assistant = () => {
                                         )
                                     }
                                 </div>
-                                <div className="right-4 bottom-0 flex z-10 flex-row-reverse" style={{ bottom: "20px" }}>
+                                <div className="right-4 flex z-10 flex-row-reverse">
                                     {/* <button onClick={handleSubmit} className="w-25 bg-gradient-to-r from-[#7a2dc1] to-[#dd00ac]  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center"> */}
                                     <button onClick={handleSubmit} className="justify-center w-40 bg-gradient-to-r from-[#61c6eaaf] to-[#61c6ea]  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
                                         {
@@ -398,15 +398,15 @@ const Assistant = () => {
                                     </button>
                                     <input
                                         type="file"
-                                        accept=".txt,.doc,.docx"
+                                        accept=".txt"
                                         onChange={handleFileUpload}
                                         className="hidden"
                                         id="fileInput"
                                     />
                                     {/* Upload button */}
                                     <label htmlFor="fileInput" className="justify-center w-40 ml-2 bg-gradient-to-r from-[#61c6eaaf] to-[#61c6ea]  hover:opacity-70 text-white font-bold py-2 px-2 rounded flex items-center cursor-pointer">
-                                        <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
-                                        Script Upload
+                                        <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
+                                        Add Script
                                     </label>
                                     {/* <button onClick={handleLoad} className="bg-gradient-to-r from-blue-700 to-blue-500  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
                                         {
