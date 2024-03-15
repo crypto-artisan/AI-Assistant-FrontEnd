@@ -58,6 +58,7 @@ const Assistant = () => {
     //clipboard
     const [isCopied, setIsCopied] = useState(false);
     useEffect(() => {
+        setTranscript(transcript);
         if (transcript.trim() !== "") setTranscriptErrorMessage("");
         if (processType.trim() !== "") setTypeErrorMessage("");
         if (peopleNumber.trim() !== "") setNumberErrorMessage("");
