@@ -124,6 +124,11 @@ const Assistant = () => {
         setSubmitLoading(false);
         setResponseExist(false);
     }
+    const handleRegenerate = () => {
+        setSubmitLoading(false);
+        setResponseExist(false);
+        handleSubmit();
+    }
     const handleKeyDown = (event: any) => {
         if (event.key === 'Enter' && event.shiftKey) {
             event.preventDefault(); // Prevent the default behavior
@@ -292,9 +297,9 @@ const Assistant = () => {
                             <FontAwesomeIcon icon={faAnglesLeft} className="mr-2" />
                             Back
                         </button>
-                        <button onClick={handleBack} className="right-2 bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
+                        <button onClick={handleRegenerate} className="right-2 bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
                             <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
-                            Regenerator
+                            Regenerate
                         </button>
                     </div>
                 )
