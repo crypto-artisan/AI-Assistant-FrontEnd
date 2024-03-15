@@ -272,8 +272,8 @@ const Assistant = () => {
                     <div className=''>
                         <Lottie
                             options={defaultOptions}
-                            height={300}
-                            width={300}
+                            height={260}
+                            width={260}
                         />
                     </div>
                 )
@@ -284,8 +284,8 @@ const Assistant = () => {
                     <div className=''>
                         <Lottie
                             options={submitLoadingOption}
-                            height={300}
-                            width={600}
+                            height={260}
+                            width={260}
                         />
                     </div>
                 )
@@ -293,9 +293,9 @@ const Assistant = () => {
             {
                 (submitLoading && responseExist) &&
                 (
-                    <div className='flex flex-row-reverse absolute z-[100] top-[-50px] right-2 w-30'>
+                    <div className='flex flex-row-reverse absolute z-[100] top-[-50px] right-5 w-30'>
                         <button onClick={handleBack} className="bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
-                            <FontAwesomeIcon icon={faAnglesLeft} className="mr-2" />
+                            <FontAwesomeIcon icon={faAnglesLeft} className="mr-5" />
                             Back
                         </button>
                         <button onClick={handleRegenerate} className="right-2 bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
@@ -309,7 +309,7 @@ const Assistant = () => {
             {
                 (submitLoading && responseExist) ?
                     (
-                        <div style={{ height: "80%", minHeight: "75%", maxHeight: "75%" }} className="relative mt-20 sm:h-[70%] sm:min-h[70%] min-h[70%] h-[70%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden py-[5%] dark:bg-gradient-to-r dark:to-[#045d7e] dark:from-[#033d52] bg-gradient-to-r to-[#6ebbd6af] from-[#61c6ea] rounded-xl dark:text-[#fff] text-[#000000c5] font-sans font-medium text-xl m-0 p-0">
+                        <div style={{ height: "80%", minHeight: "75%", maxHeight: "75%" }} className="relative mx-5 mt-20 sm:h-[70%] sm:min-h[70%] min-h[70%] h-[70%] overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden py-[5%] dark:bg-gradient-to-r dark:to-[#045d7e] dark:from-[#033d52] bg-gradient-to-r to-[#6ebbd6af] from-[#61c6ea] rounded-xl dark:text-[#fff] text-[#000000c5] font-sans font-medium text-xl m-0 p-0">
                             <pre style={{ textAlign: 'left', whiteSpace: "pre-line", justifyContent: "space-around" }} className="sm:ml-[50px] ml-[10px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
                             <button onClick={handleCopy} className="copy-button absolute top-5 right-5">
                                 {isCopied ? (
@@ -322,16 +322,16 @@ const Assistant = () => {
                     )
                     :
                     (
-                        <div className="mx-5 bg-transparent flex flex-col">
+                        <div className="mx-20 bg-transparent flex flex-col">
                             <form className="w-full">
-                                <label htmlFor="processType" className="block text-md mb-3 font-medium text-gray-700">What type of process are you looking to document?</label>
+                                <label htmlFor="processType" className="block text-md mb-2 font-medium text-gray-700">What type of process are you looking to document?*</label>
                                 <div className='relative'>
                                     <input
                                         id="processType"
                                         value={processType}
                                         onChange={(e) => setProcessType(e.target.value)}
                                         type="text"
-                                        className="w-full px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 dark:text-white text-black font-sans rounded-xl border-solid border-2 border-[#d2d5d7] focus:outline-none focus-within:border-[#61c6ea]" // Added padding-left to make space for the icon
+                                        className="w-full px-3 text-lg min-h-14 bg-[#0000] placeholder:text-slate-400 dark:text-white text-black font-sans rounded-xl border-solid border-2 border-[#d2d5d7] focus:outline-none focus-within:border-[#61c6ea]" // Added padding-left to make space for the icon
                                         placeholder="Enter description of process..."
                                     />
                                     {
@@ -346,7 +346,7 @@ const Assistant = () => {
 
                             </form>
                             <form className="w-full mt-3">
-                                <label htmlFor="peopleNumber" className="block text-md mb-3 font-medium text-gray-700">How many people are talking in the transcript?</label>
+                                <label htmlFor="peopleNumber" className="block text-md my-2 font-medium text-gray-700">How many people are talking in the transcript?*</label>
                                 <div className='relative'>
                                     <input
                                         id="peopleNumber"
@@ -362,7 +362,7 @@ const Assistant = () => {
                                             }
                                         }}
                                         type="text"
-                                        className="w-full px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 text-black dark:text-white font-sans rounded-xl border-solid border-2 border-[#d2d5d7] focus:outline-none focus-within:border-[#61c6ea]" // Added padding-left to make space for the icon
+                                        className="w-full px-3 text-lg min-h-14 bg-[#0000] placeholder:text-slate-400 text-black dark:text-white font-sans rounded-xl border-solid border-2 border-[#d2d5d7] focus:outline-none focus-within:border-[#61c6ea]" // Added padding-left to make space for the icon
                                         placeholder="Enter number..."
                                     />
                                     {numberErrorMessage && (
@@ -375,9 +375,9 @@ const Assistant = () => {
                             </form>
                             {/* </div> */}
                             <div className="my-3">
-                                <label htmlFor="transcript" className="block text-md mb-3 font-medium text-gray-700">Please copy and paste your transcript below.</label>
+                                <label htmlFor="transcript" className="block text-md my-2 font-medium text-gray-700">Please copy and paste your transcript below.*</label>
                                 <div className='relative'>
-                                    <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={5} className="resize-none overflow-y-auto w-full py-3 px-3 min-h-60 text-xl bg-[#0000] text-black dark:text-white border-[#d2d5d7] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus:outline-none focus-within:border-[#61c6ea]" placeholder="Enter transcript..." />
+                                    <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={4} className="resize-none overflow-y-auto w-full py-3 px-3 min-h-40 text-lg bg-[#0000] text-black dark:text-white border-[#d2d5d7] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus:outline-none focus-within:border-[#61c6ea]" placeholder="Enter transcript..." />
                                     {
                                         transcriptErrorMessage && (
                                             <div className='text-[#de1515] absolute top-[6%] right-5'>

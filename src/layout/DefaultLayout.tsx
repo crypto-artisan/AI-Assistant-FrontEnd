@@ -14,7 +14,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
           {/* <img src="./src/images/wave-top.svg" height={"10px"} className='w-full' /> */}
           {/* <img src = "back-top.png" height={"10px"} className='w-[32%] sm:h-8 h-[0px] self-center mb-3' /> */}
           <main className='h-screen'>
-            <div className="mx-auto max-w-screen-2xl justify-items-stretch h-full relative">
+            <div className="mx-auto max-w-screen-2xl justify-items-stretch h-full relative my-5">
               {children}
             </div>
           </main>
