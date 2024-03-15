@@ -50,46 +50,7 @@ const Assistant = () => {
     const [processType, setProcessType] = useState<string>("");
     const [peopleNumber, setPeopleNumber] = useState<string>("");
     //gpt response
-    const [completion, setCompletion] = useState(`0:01 Hi. In this video I'm gonna walk you through how to file a Google document formatting request. If you have a Google document that you share externally to our clients or customers, then you may want to have it formatted according to our style standard steps.
-
-    0:23 So all we have to do to file the request for it is to go to the system Google document formatting request and follow the steps under Part A, filing a Google document formatting request.
-    
-    0:37 Now I'm going to do that for you. So let's begin. Step one, you have to duplicate the task g ddoc slash document formatting request.
-    
-    0:47 You have to go to Asana and go to systems, policies and training. Once you are there, all you have to do is to look for that specific task and duplicate it.
-    
-    1:02 Now I am already duplicating the task Before I move forward, I will rename this one to the actual file name of my Google documents.
-    
-    1:17 So for example, I have it here, certification Team Member agreement. I wanted want it to be formatted. So I am changing the name over here.
-    
-    1:27 I've created the task. Now that I've created the task, I will move it under waiting for brief. Alright, there are two things that you have to keep in mind when doing this.
-    
-    1:41 First one is to fill out the job request form, and the second one is to assign it to a documentation specialist.
-    
-    1:51 So that is step number two, <laugh>. So you have to edit the job request form, insert the link. So I'm going to copy this one and I am going to put it over here.
-    
-    2:07 If your document is not in Google, then all you have to do is to upload the file. Okay? And then the second one is you have to determine the level of priority.
-    
-    2:20 When do you need this? Is this a low, mid, or high priority? And then you have to tag the knowledgeable worker.
-    
-    2:28 If you own the document, then more likely you are the knowledgeable worker for it. But you, if you are filing a request for somebody else, then you have to tag the name of the knowledgeable worker over here.
-    
-    2:42 Let's say I don't own this file <laugh>, and this is owned by another team member. Then I'll tag that team member over here.
-    
-    2:55 And then if you have uploaded the file, it's not in Google yet, it's not in Google form, it's not a Google document, then you have to let us know, or you have to put over here to which folder do you want it to be saved.
-    
-    3:15 All right? And then put any, if this one, let's say your document is already saved in the right location, all I all you have or all you needed is for it to be formatted, then just put n a over here and if you have additional notes, then add your additional notes.
-    
-    3:38 And next to that, once you have already filled out the job request form as you can see over here under subtasks, I am going to mark these two as complete.
-    
-    3:52 And then I am going to ask, assign it to a documentation specialist and add a due date. So, going to add this, I mean assign it for example to Joe, and then I, I don't really need it right away.
-    
-    4:09 So let's say I'm going to give a two week time for this to be documented so Joe can look into her schedule and see if she can format this document for me.
-    
-    4:23 And then once I'm done, I'll just click sign. I mean, I'll complete the task. And voila, you have already submitted your request for your document to be formatted according to our standard.
-    
-    4:37 Thank you.
-    `);
+    const [completion, setCompletion] = useState("");
     const [messages, setMessages] = useState<Message[] | null>(null);
     const [typeErrorMessage, setTypeErrorMessage] = useState("");
     const [numberErrorMessage, setNumberErrorMessage] = useState("");
@@ -97,7 +58,7 @@ const Assistant = () => {
     //clipboard
     const [isCopied, setIsCopied] = useState(false);
     useEffect(() => {
-        setTranscript(transcript);
+        setPrompt(transcript);
         if (transcript.trim() !== "") setTranscriptErrorMessage("");
         if (processType.trim() !== "") setTypeErrorMessage("");
         if (peopleNumber.trim() !== "") setNumberErrorMessage("");
