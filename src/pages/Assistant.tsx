@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import DefaultLayout from '../layout/DefaultLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faPaperPlane, faDatabase, faSpinner, faCopy, faCheck, faAnglesLeft, faScroll, faUserGroup, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import Lottie from 'react-lottie';
 
 import animationData from '../../public/Lotties/Hand-robot.json';
-import SubmitLoading from '../../public/Lotties/Submit-loading.json';
+// import SubmitLoading from '../../public/Lotties/Submit-loading.json';
+// import SubmitLoading from '../../public/Lotties/loading (1).json';
+// import SubmitLoading from '../../public/Lotties/loading (2).json';
+import SubmitLoading from '../../public/Lotties/loading (3).json';
 
 const serverUrl = "https://ai-assistant-back-end-pi.vercel.app/api";
 
@@ -18,6 +22,7 @@ interface Message {
 }
 
 const Assistant = () => {
+
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -47,11 +52,15 @@ const Assistant = () => {
     //gpt response
     const [completion, setCompletion] = useState("");
     const [messages, setMessages] = useState<Message[] | null>(null);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [typeErrorMessage, setTypeErrorMessage] = useState("");
+    const [numberErrorMessage, setNumberErrorMessage] = useState("");
+    const [transcriptErrorMessage, setTranscriptErrorMessage] = useState("");
     //clipboard
     const [isCopied, setIsCopied] = useState(false);
     useEffect(() => {
-        setPrompt(transcript);
+        if (transcript.trim() !== "") setTranscriptErrorMessage("");
+        if (processType.trim() !== "") setTypeErrorMessage("");
+        if (peopleNumber.trim() !== "") setNumberErrorMessage("");
     }, [processType, peopleNumber, transcript])
     useEffect(() => {
         // setPrompt("");
@@ -61,47 +70,56 @@ const Assistant = () => {
                 { id: messages.length, text: completion, sender: "bot" },
             ]);
     }, [completion]);
-    useEffect(() => {
-        // setPrompt("");
-        if (messages != null && errorMessage != "") {
-            setMessages([
-                ...messages,
-                { id: messages.length, text: errorMessage, sender: "bot" },
-            ]);
-            // setErrorMessage("");
-        }
-    }, [errorMessage]);
-    const handleLoad = async () => {
-        setLoading(true);
-        try {
-            if (peopleNumber.trim() == "") {
-                // console.log("people number is empty");
-                setErrorMessage("Type a number of people!");
-                return;
-            }
-            else if (peopleNumber == "1") {
-                const response = await fetch(`${serverUrl}/file-format`);
-                if (!response.ok) {
-                    throw new Error('Something went wrong, please try again!');
-                }
-                const data = await response.json();
-                setTranscript(data.result);
-            }
-            else {
-                const response = await fetch(`${serverUrl}/facebook-engagement`);
-                if (!response.ok) {
-                    throw new Error('Something went wrong, please try again!');
-                }
-                const data = await response.json();
-                setTranscript(data.result);
-            }
+    // const handleLoad = async () => {
+    //     setLoading(true);
+    //     try {
+    //         if (peopleNumber.trim() == "") {
+    //             // console.log("people number is empty");
+    //             setNumberErrorMessage("Required!");
+    //             toast.error("Type a number of people!",
+    //                 {
+    //                     position: toast.POSITION.TOP_RIGHT,
+    //                     autoClose: 1500,
+    //                     hideProgressBar: false,
+    //                 })
 
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //             return;
+    //         }
+    //         else if (peopleNumber == "1") {
+    //             const response = await fetch(`${serverUrl}/file-format`);
+    //             if (!response.ok) {
+    //                 toast.error("Something went wrong, please try again!",
+    //                     {
+    //                         position: toast.POSITION.TOP_RIGHT,
+    //                         autoClose: 1500,
+    //                         hideProgressBar: false,
+    //                     })
+    //                 throw new Error('Something went wrong, please try again!');
+    //             }
+    //             const data = await response.json();
+    //             setTranscript(data.result);
+    //         }
+    //         else {
+    //             const response = await fetch(`${serverUrl}/facebook-engagement`);
+    //             if (!response.ok) {
+    //                 toast.error("Something went wrong, please try again!",
+    //                     {
+    //                         position: toast.POSITION.TOP_RIGHT,
+    //                         autoClose: 1500,
+    //                         hideProgressBar: false,
+    //                     })
+    //                 throw new Error('Something went wrong, please try again!');
+    //             }
+    //             const data = await response.json();
+    //             setTranscript(data.result);
+    //         }
+
+    //     } catch (error) {
+    //         console.error('There was a problem with the fetch operation:', error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
     const handleBack = () => {
         setSubmitLoading(false);
         setResponseExist(false);
@@ -124,21 +142,40 @@ const Assistant = () => {
         }
     };
     const handleSubmit = async () => {
-        setErrorMessage("");
         setSubmitLoading(true);
-        if (transcript.trim() == "" || processType.trim() == "" || peopleNumber.trim() == "") {
+        if (processType.trim() == "" || peopleNumber.trim() == "" || transcript.trim() == "") {
             console.log("prompt is empty");
+            toast.error("All fields Required!",
+                {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                })
             setSubmitLoading(false);
-            setErrorMessage("All fields Required!");
+            if (processType.trim() == "") {
+                setTypeErrorMessage("Required!");
+            }
+            if (peopleNumber.trim() == "") {
+                setNumberErrorMessage("Required!");
+            }
+            if (transcript.trim() == "") {
+                setTranscriptErrorMessage("Required!");
+            }
             return;
         }
-
         try {
             let instruction;
             if (peopleNumber == "1") {
                 let response1;
                 response1 = await fetch(`${serverUrl}/singleperson-prompt`);
                 if (!response1.ok) {
+                    toast.error("Something went wrong, please try again!",
+                        {
+                            position: toast.POSITION.TOP_RIGHT,
+                            autoClose: 1500,
+                            hideProgressBar: false,
+                        })
+
                     throw new Error('Something went wrong, please try again!');
                 }
                 let data1 = await response1.json();
@@ -148,6 +185,12 @@ const Assistant = () => {
             else {
                 let response2 = await fetch(`${serverUrl}/multiperson-prompt`);
                 if (!response2.ok) {
+                    toast.error("Something went wrong, please try again!",
+                        {
+                            position: toast.POSITION.TOP_RIGHT,
+                            autoClose: 1500,
+                            hideProgressBar: false,
+                        })
                     throw new Error('Something went wrong, please try again!');
                 }
                 let data2 = await response2.json();
@@ -178,7 +221,12 @@ const Assistant = () => {
 
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
-            setErrorMessage("Something went wrong, please try again!");
+            toast.error("Something went wrong, please try again!",
+                {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                })
             handleBack();
         } finally {
             console.log("responseExist--------->", responseExist);
@@ -211,6 +259,7 @@ const Assistant = () => {
     };
     return (
         <DefaultLayout>
+            <ToastContainer />
             {
                 (!submitLoading && !responseExist) &&
                 (
@@ -230,7 +279,7 @@ const Assistant = () => {
                         <Lottie
                             options={submitLoadingOption}
                             height={300}
-                            width={300}
+                            width={600}
                         />
                     </div>
                 )
@@ -238,17 +287,23 @@ const Assistant = () => {
             {
                 (submitLoading && responseExist) &&
                 (
-                    <button onClick={handleBack} className="absolute z-[100] top-[-50px] right-2 w-30 bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
-                        <FontAwesomeIcon icon={faAnglesLeft} className="mr-2" />
-                        Back
-                    </button>
+                    <div className='flex flex-row-reverse absolute z-[100] top-[-50px] right-2 w-30'>
+                        <button onClick={handleBack} className="bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
+                            <FontAwesomeIcon icon={faAnglesLeft} className="mr-2" />
+                            Back
+                        </button>
+                        <button onClick={handleBack} className="right-2 bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] hover:opacity-70 text-white font-bold py-2 px-4 rounded ml-2 flex items-center">
+                            <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
+                            Regenerator
+                        </button>
+                    </div>
                 )
             }
 
             {
                 (submitLoading && responseExist) ?
                     (
-                        <div style={{ height: "80%", minHeight: "75%", maxHeight: "75%" }} className="sm:h-[70%] sm:min-h[70%] min-h[70%] h-[70%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] dark:bg-gradient-to-r dark:to-[#045d7e] dark:from-[#033d52] bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] rounded-xl dark:text-[#fff] text-[#000000c5] font-sans font-medium text-xl m-0 p-0">
+                        <div style={{ height: "80%", minHeight: "75%", maxHeight: "75%" }} className="mt-20 sm:h-[70%] sm:min-h[70%] min-h[70%] h-[70%] mx-2 overflow-hidden max-w-[100%] overflow-y-auto overflow-x-hidden relative py-[5%] dark:bg-gradient-to-r dark:to-[#045d7e] dark:from-[#033d52] bg-gradient-to-r from-[#6ebbd6af] to-[#61c6ea] rounded-xl dark:text-[#fff] text-[#000000c5] font-sans font-medium text-xl m-0 p-0">
                             <pre style={{ textAlign: 'left', whiteSpace: "pre-line", justifyContent: "space-around" }} className="sm:ml-[100px] ml-[20px] max-w-[100%] whitespace-pre-wrap">{completion}</pre>
                             <button onClick={handleCopy} className="copy-button absolute top-5 right-5">
                                 {isCopied ? (
@@ -262,45 +317,79 @@ const Assistant = () => {
                     :
                     (
                         <div className="mx-5 bg-transparent flex flex-col">
-                            <form className="relative w-full">
-                                <input
-                                    value={processType}
-                                    onChange={(e) => setProcessType(e.target.value)}
-                                    type="text"
-                                    className="w-full py-3 px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 dark:text-white text-black font-sans rounded-xl border-solid border-2 border-[#61c6ea] focus-within:shadow-lg focus-within:shadow-[#61c6ea] pl-10 focus:outline-none" // Added padding-left to make space for the icon
-                                    placeholder="*What type of process are you looking to document? (ex: A request a google document)"
-                                />
-                                <FontAwesomeIcon
-                                    icon={faScroll} // Replace faDatabase with the icon you want to use
-                                    className="absolute left-3 top-1/2 transform -translate-y-1/2 dark:text-white text-[#61c6ea]" // Adjust positioning as needed
-                                />
+                            <form className="w-full">
+                                <label htmlFor="processType" className="block text-md mb-3 font-medium text-gray-700">What type of process are you looking to document?</label>
+                                <div className='relative'>
+                                    <input
+                                        id="processType"
+                                        value={processType}
+                                        onChange={(e) => setProcessType(e.target.value)}
+                                        type="text"
+                                        className="w-full px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 dark:text-white text-black font-sans rounded-xl border-solid border-2 border-[#d2d5d7] focus:outline-none focus-within:border-[#61c6ea]" // Added padding-left to make space for the icon
+                                        placeholder="Enter description of process..."
+                                    />
+                                    {
+                                        typeErrorMessage && (
+                                            <div className='text-[#de1515] absolute top-[28%] right-5'>
+                                                <h1 className='text-center'><span><FontAwesomeIcon icon={faCircleExclamation} className="mr-2" /></span>{typeErrorMessage}</h1>
+                                            </div>
+                                        )
+                                    }
+
+                                </div>
+
                             </form>
-                            <form className="relative w-full mt-3">
-                                <input
-                                    value={peopleNumber}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        // Check if the input is a digit
-                                        if (/^\d+$/.test(value)) {
-                                            setPeopleNumber(value);
-                                        } else {
-                                            // Optionally, clear the input or set it to a default value
-                                            setPeopleNumber("");
-                                        }
-                                    }}
-                                    type="text"
-                                    className="w-full py-3 px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 text-black dark:text-white font-sans rounded-xl border-solid border-2 border-[#61c6ea] focus-within:shadow-lg focus-within:shadow-[#61c6ea] pl-10 focus:outline-none" // Added padding-left to make space for the icon
-                                    placeholder="*How many people are in the transcript? (ex: 2)"
-                                />
-                                <FontAwesomeIcon
-                                    icon={faUserGroup} // Replace faDatabase with the icon you want to use
-                                    className="absolute left-3 top-1/2 transform -translate-y-1/2 dark:text-white text-[#61c6ea]" // Adjust positioning as needed
-                                />
+                            <form className="w-full mt-3">
+                                <label htmlFor="peopleNumber" className="block text-md mb-3 font-medium text-gray-700">How many people are talking in the transcript?</label>
+                                <div className='relative'>
+                                    <input
+                                        id="peopleNumber"
+                                        value={peopleNumber}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            // Check if the input is a digit
+                                            if (/^\d+$/.test(value)) {
+                                                setPeopleNumber(value);
+                                            } else {
+                                                // Optionally, clear the input or set it to a default value
+                                                setPeopleNumber("");
+                                            }
+                                        }}
+                                        type="text"
+                                        className="w-full px-3 text-xl min-h-14 bg-[#0000] placeholder:text-slate-400 text-black dark:text-white font-sans rounded-xl border-solid border-2 border-[#d2d5d7] focus:outline-none focus-within:border-[#61c6ea]" // Added padding-left to make space for the icon
+                                        placeholder="Enter number..."
+                                    />
+                                    {numberErrorMessage && (
+                                        <div className='text-[#de1515] absolute top-[28%] right-5'>
+                                            <h1 className='text-center'><span><FontAwesomeIcon icon={faCircleExclamation} className="mr-2" /></span>{numberErrorMessage}</h1>
+                                        </div>
+                                    )
+                                    }
+                                </div>
                             </form>
                             {/* </div> */}
-                            <div className="relative">
-                                <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={5} className="resize-none overflow-y-auto w-full mt-3 py-3 px-3 min-h-60 text-xl bg-[#0000] text-black dark:text-white border-[#61c6ea] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus-within:shadow-lg focus-within:shadow-[#61c6ea] focus:outline-none" placeholder="*Please copy and paste your transcript below:" />
-                                <div className="absolute right-4 bottom-0 flex z-10" style={{ bottom: "20px" }}>
+                            <div className="my-3">
+                                <label htmlFor="transcript" className="block text-md mb-3 font-medium text-gray-700">Please copy and paste your transcript below.</label>
+                                <div className='relative'>
+                                    <textarea onKeyDown={handleKeyDown} onChange={handleTextareaEdit} value={transcript} rows={5} className="resize-none overflow-y-auto w-full py-3 px-3 min-h-60 text-xl bg-[#0000] text-black dark:text-white border-[#d2d5d7] font-sans rounded-xl placeholder:text-slate-400 border-solid border-2 focus:outline-none focus-within:border-[#61c6ea]" placeholder="Enter transcript..." />
+                                    {
+                                        transcriptErrorMessage && (
+                                            <div className='text-[#de1515] absolute top-[6%] right-5'>
+                                                <h1 className='text-center'><span><FontAwesomeIcon icon={faCircleExclamation} className="mr-2" /></span>{transcriptErrorMessage}</h1>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                <div className="right-4 bottom-0 flex z-10 flex-row-reverse" style={{ bottom: "20px" }}>
+                                    {/* <button onClick={handleSubmit} className="w-25 bg-gradient-to-r from-[#7a2dc1] to-[#dd00ac]  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center"> */}
+                                    <button onClick={handleSubmit} className="justify-center w-40 bg-gradient-to-r from-[#61c6eaaf] to-[#61c6ea]  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
+                                        {
+                                            submitLoading ? (<FontAwesomeIcon icon={faSpinner} spin />)
+                                                :
+                                                (<FontAwesomeIcon icon={faPaperPlane} className="mr-2" />)
+                                        }
+                                        Generate
+                                    </button>
                                     <input
                                         type="file"
                                         accept=".txt,.doc,.docx"
@@ -309,42 +398,25 @@ const Assistant = () => {
                                         id="fileInput"
                                     />
                                     {/* Upload button */}
-                                    <label htmlFor="fileInput" className="bg-gradient-to-r from-[#61c6eaaf] to-[#61c6ea]  hover:opacity-70 text-white font-bold py-2 px-2 rounded flex items-center cursor-pointer">
+                                    <label htmlFor="fileInput" className="justify-center w-40 ml-2 bg-gradient-to-r from-[#61c6eaaf] to-[#61c6ea]  hover:opacity-70 text-white font-bold py-2 px-2 rounded flex items-center cursor-pointer">
                                         <FontAwesomeIcon icon={faPaperclip} className="mr-2" />
-                                        Upload
+                                        Script Upload
                                     </label>
-                                    <button onClick={handleLoad} className="bg-gradient-to-r from-blue-700 to-blue-500  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
+                                    {/* <button onClick={handleLoad} className="bg-gradient-to-r from-blue-700 to-blue-500  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
                                         {
                                             loading ? (<FontAwesomeIcon icon={faSpinner} spin />)
                                                 :
                                                 (<FontAwesomeIcon icon={faDatabase} className="mr-2" />)
                                         }
                                         Google
-                                    </button>
-                                    <button onClick={handleSubmit} className="w-25 bg-gradient-to-r from-[#7a2dc1] to-[#dd00ac]  hover:opacity-70 text-white font-bold py-2 px-2 rounded ml-2 flex items-center">
-                                        {
-                                            submitLoading ? (<FontAwesomeIcon icon={faSpinner} spin />)
-                                                :
-                                                (<FontAwesomeIcon icon={faPaperPlane} className="mr-2" />)
-                                        }
-                                        Submit
-                                    </button>
+                                    </button> */}
+
                                 </div>
                             </div>
-                            <div className='flex flex-row w-full'>
-                                {
-                                    errorMessage && (
-                                        <div className='w-full text-[#de1515]'>
-                                            <h1 className='text-center'><span><FontAwesomeIcon icon={faCircleExclamation} className="mr-2" /></span>{errorMessage}</h1>
-                                        </div>
-                                    )
-                                }
-                            </div>
-
                         </div>
                     )
             }
-        </DefaultLayout>
+        </DefaultLayout >
     );
 };
 

@@ -10,9 +10,9 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
         {/* <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <h1 className='self-center sm:text-[40px] mt-5 mb-10 text-[0px] dark:text-white text-[#61c6ea] font-extrabold'>Easy to Use — No Tech Skills Required</h1>
+          {/* <h1 className='self-center sm:text-[40px] mt-5 mb-10 text-[0px] dark:text-white text-[#61c6ea] font-extrabold'>Easy to Use — No Tech Skills Required</h1> */}
           {/* <img src="./src/images/wave-top.svg" height={"10px"} className='w-full' /> */}
-          <img src = "back-top.png" height={"10px"} className='w-[32%] sm:h-8 h-[0px] self-center mb-3' />
+          {/* <img src = "back-top.png" height={"10px"} className='w-[32%] sm:h-8 h-[0px] self-center mb-3' /> */}
           <main className='h-screen'>
             <div className="mx-auto max-w-screen-2xl justify-items-stretch h-full relative">
               {children}
