@@ -282,7 +282,7 @@ const Assistant = () => {
     return (
         <DefaultLayout>
             <ToastContainer />
-            {
+            {/* {
                 (!submitLoading && !responseExist) &&
                 (
                     <div className=''>
@@ -293,7 +293,8 @@ const Assistant = () => {
                         />
                     </div>
                 )
-            }
+            } */}
+            
             {
                 (submitLoading && !responseExist) &&
                 (
